@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4 mb-3">
+        <i class="bi bi-hospital text-primary"></i> Veteriner Reçete Sistemi
+    </h1>
+    <p class="lead">Dijital veteriner reçete yönetim sistemi ile hasta kayıtlarını ve reçeteleri kolayca yönetin</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100 border-primary shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-heart-pulse text-primary" style="font-size: 2.5rem;"></i>
+                <h5 class="card-title mt-3">Hastalar</h5>
+                <p class="card-text">Hasta kayıtlarını görüntüleyin, ekleyin ve düzenleyin.</p>
+                <a asp-controller="Patients" asp-action="Index" class="btn btn-primary">
+                    <i class="bi bi-arrow-right-circle"></i> Hasta Yönetimi
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100 border-success shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-capsule text-success" style="font-size: 2.5rem;"></i>
+                <h5 class="card-title mt-3">İlaçlar</h5>
+                <p class="card-text">İlaç envanterini yönetin ve stok takibi yapın.</p>
+                <a asp-controller="Medicines" asp-action="Index" class="btn btn-success">
+                    <i class="bi bi-arrow-right-circle"></i> İlaç Yönetimi
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100 border-info shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-file-text text-info" style="font-size: 2.5rem;"></i>
+                <h5 class="card-title mt-3">Reçeteler</h5>
+                <p class="card-text">Reçete oluşturun ve mevcut reçeteleri yönetin.</p>
+                <a asp-controller="Prescriptions" asp-action="Index" class="btn btn-info text-white">
+                    <i class="bi bi-arrow-right-circle"></i> Reçete Yönetimi
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card h-100 border-warning shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-gear text-warning" style="font-size: 2.5rem;"></i>
+                <h5 class="card-title mt-3">Ayarlar</h5>
+                <p class="card-text">Sistem ayarlarını ve kullanıcı tercihlerini yönetin.</p>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-warning text-dark">
+                    <i class="bi bi-arrow-right-circle"></i> Ayarları Yönet
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-info-circle text-primary"></i> Hızlı Başlangıç Kılavuzu
+                </h5>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary text-white rounded-circle p-2 me-3" style="width: 32px; height: 32px; text-align: center;">1</div>
+                            <div>
+                                <h6>Hasta Kaydı</h6>
+                                <p class="text-muted">Yeni hasta kaydı oluşturmak için "Hasta Yönetimi" bölümüne gidin.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-success text-white rounded-circle p-2 me-3" style="width: 32px; height: 32px; text-align: center;">2</div>
+                            <div>
+                                <h6>İlaç Envanteri</h6>
+                                <p class="text-muted">Mevcut ilaçları görüntülemek ve yeni ilaç eklemek için "İlaç Yönetimi" bölümünü kullanın.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-info text-white rounded-circle p-2 me-3" style="width: 32px; height: 32px; text-align: center;">3</div>
+                            <div>
+                                <h6>Reçete Oluşturma</h6>
+                                <p class="text-muted">Hasta için yeni bir reçete oluşturmak için "Reçete Yönetimi" bölümüne gidin.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card bg-light shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-lightbulb text-warning"></i> Sistem Özellikleri
+                </h5>
+                <hr />
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <i class="bi bi-shield-check text-success h4"></i>
+                            <h6>Güvenli Veri Saklama</h6>
+                            <p class="text-muted small">Tüm hasta ve reçete bilgileri güvenli bir şekilde saklanır.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <i class="bi bi-clock-history text-primary h4"></i>
+                            <h6>Geçmiş Takibi</h6>
+                            <p class="text-muted small">Hasta ve reçete geçmişini kolayca görüntüleyin.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <i class="bi bi-printer text-info h4"></i>
+                            <h6>Kolay Yazdırma</h6>
+                            <p class="text-muted small">Reçeteleri tek tıkla yazdırın.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <i class="bi bi-graph-up text-warning h4"></i>
+                            <h6>Stok Takibi</h6>
+                            <p class="text-muted small">İlaç envanterini otomatik olarak takip edin.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

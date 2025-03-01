@@ -1,0 +1,105 @@
+@model IEnumerable<VeterinaryPrescriptionSystem.Web.Models.Prescription>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Reçeteler";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="display-4 mb-0">
+            <i class="bi bi-file-text text-info"></i> Reçeteler
+        </h1>
+        <p class="text-muted">Tüm reçeteleri görüntüleyin ve yönetin</p>
+    </div>
+    <div>
+        <a asp-action="Create" class="btn btn-info text-white">
+            <i class="bi bi-plus-circle"></i> Yeni Reçete Oluştur
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>
+                            <i class="bi bi-calendar-date"></i> @Html.DisplayNameFor(model => model.PrescriptionDate)
+                        </th>
+                        <th>
+                            <i class="bi bi-person"></i> @Html.DisplayNameFor(model => model.Patient)
+                        </th>
+                        <th>
+                            <i class="bi bi-clipboard2-pulse"></i> @Html.DisplayNameFor(model => model.Diagnosis)
+                        </th>
+                        <th>
+                            <i class="bi bi-card-text"></i> @Html.DisplayNameFor(model => model.Notes)
+                        </th>
+                        <th>
+                            <i class="bi bi-person-badge"></i> @Html.DisplayNameFor(model => model.VeterinarianId)
+                        </th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.PrescriptionDate)</td>
+                            <td>
+                                <a asp-controller="Patients" asp-action="Details" asp-route-id="@item.PatientId" class="text-decoration-none">
+                                    @Html.DisplayFor(modelItem => item.Patient.Name)
+                                </a>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.Diagnosis)</td>
+                            <td>
+                                @if (string.IsNullOrEmpty(item.Notes))
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Notes)
+                                }
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.VeterinarianId)</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" title="Düzenle">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info" title="Detaylar">
+                                        <i class="bi bi-info-circle"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Sil">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-outline-success" title="Yazdır" onclick="window.print()">
+                                        <i class="bi bi-printer"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Tooltip'leri aktifleştir
+            $('[title]').tooltip();
+        });
+    </script>
+}

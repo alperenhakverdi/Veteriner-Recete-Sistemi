@@ -1,0 +1,345 @@
+@model VeterinaryPrescriptionSystem.Web.Models.Prescription
+
+@{
+    ViewData["Title"] = "Reçete Oluştur";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">
+                    <i class="bi bi-file-earmark-medical"></i> Yeni Reçete Oluştur
+                </h2>
+                <a asp-action="Index" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Reçete Listesi
+                </a>
+            </div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@modelError.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-action="Create" id="prescriptionForm" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <!-- Hasta ve Tanı Bilgileri -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-person"></i> Hasta ve Tanı Bilgileri
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="PrescriptionDate" class="form-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-calendar"></i>
+                                    </span>
+                                    <input asp-for="PrescriptionDate" class="form-control" type="date" required />
+                                </div>
+                                <span asp-validation-for="PrescriptionDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PatientId" class="form-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-heart-pulse"></i>
+                                    </span>
+                                    <select asp-for="PatientId" class="form-select" asp-items="ViewBag.PatientId" required>
+                                        <option value="">Hasta Seçiniz</option>
+                                    </select>
+                                </div>
+                                <span asp-validation-for="PatientId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label asp-for="VeterinarianId" class="form-label">Veteriner Hekim</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person-badge"></i>
+                                    </span>
+                                    <input asp-for="VeterinarianId" class="form-control" required placeholder="Veteriner hekim adı ve soyadı" value="" />
+                                </div>
+                                <span asp-validation-for="VeterinarianId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Diagnosis" class="form-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-clipboard2-pulse"></i>
+                                    </span>
+                                    <textarea asp-for="Diagnosis" class="form-control" rows="3" 
+                                        placeholder="Hastanın tanısı ve teşhis detayları..." required></textarea>
+                                </div>
+                                <span asp-validation-for="Diagnosis" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Notes" class="form-label"></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-journal-text"></i>
+                                    </span>
+                                    <textarea asp-for="Notes" class="form-control" rows="2" 
+                                        placeholder="Ek notlar ve öneriler..."></textarea>
+                                </div>
+                                <span asp-validation-for="Notes" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İlaç Bilgileri -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-capsule"></i> İlaç Bilgileri
+                        </h5>
+                        <button type="button" class="btn btn-primary" id="showAddMedicineForm">
+                            <i class="bi bi-plus-circle"></i> İlaç Ekle
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="medicineList">
+                            <!-- Eklenen ilaçlar buraya gelecek -->
+                        </div>
+
+                        <!-- İlaç Ekleme Formu -->
+                        <div id="addMedicineForm" style="display: none;">
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-4">
+                                    <label class="form-label">İlaç</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="bi bi-capsule"></i>
+                                        </span>
+                                        <select id="newMedicineSelect" class="form-select">
+                                            <option value="">İlaç Seçiniz</option>
+                                            @foreach (var medicine in ViewBag.Medicines)
+                                            {
+                                                <option value="@medicine.Value" data-unit="@medicine.Unit">@medicine.Text</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label">Günlük Doz</label>
+                                    <div class="input-group">
+                                        <input type="number" id="newMedicineDose" class="form-control" step="0.01" min="0.01" />
+                                        <span class="input-group-text" id="newMedicineUnit">birim</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label">Kullanım Süresi</label>
+                                    <div class="input-group">
+                                        <input type="number" id="newMedicineDuration" class="form-control" min="1" max="365" />
+                                        <span class="input-group-text">gün</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label">Kullanım Talimatı</label>
+                                    <div class="input-group">
+                                        <input type="text" id="newMedicineInstructions" class="form-control" 
+                                               placeholder="Örn: Yemeklerden sonra" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-success w-100" id="confirmAddMedicine">
+                                        <i class="bi bi-plus-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Reçeteyi Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- İlaç Template -->
+<script type="text/template" id="medicineTemplate">
+    <div class="medicine-item border-bottom pb-3 mb-3">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-capsule"></i>
+                    </span>
+                    <select name="medicines[{index}].MedicineId" class="form-select medicine-select" required>
+                        <option value="">İlaç Seçiniz</option>
+                        @foreach (var medicine in ViewBag.Medicines)
+                        {
+                            <option value="@medicine.Value" data-unit="@medicine.Unit">@medicine.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="input-group">
+                    <input type="number" name="medicines[{index}].DailyDose" 
+                           class="form-control" step="0.01" min="0.01" required />
+                    <span class="input-group-text unit-label">birim</span>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="input-group">
+                    <input type="number" name="medicines[{index}].DurationInDays" 
+                           class="form-control" min="1" max="365" required />
+                    <span class="input-group-text">gün</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <input type="text" name="medicines[{index}].Instructions" 
+                           class="form-control" placeholder="Örn: Yemeklerden sonra" />
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger w-100 remove-medicine">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            let medicineIndex = 0;
+
+            // İlaç ekleme formunu göster/gizle
+            $('#showAddMedicineForm').on('click', function() {
+                $('#addMedicineForm').slideToggle();
+                $(this).find('i').toggleClass('bi-plus-circle bi-dash-circle');
+            });
+
+            // İlaç seçildiğinde birimi güncelle
+            $('#newMedicineSelect').on('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const unit = selectedOption.getAttribute('data-unit') || 'birim';
+                $('#newMedicineUnit').text(unit);
+            });
+
+            // İlaç eklemeyi onayla
+            $('#confirmAddMedicine').on('click', function() {
+                const select = $('#newMedicineSelect');
+                const dose = $('#newMedicineDose');
+                const duration = $('#newMedicineDuration');
+                const instructions = $('#newMedicineInstructions');
+
+                // Validasyon
+                if (!select.val() || !dose.val() || !duration.val()) {
+                    alert('Lütfen gerekli alanları doldurunuz!');
+                    return;
+                }
+
+                // Yeni ilaç öğesi oluştur
+                const medicineDiv = document.createElement('div');
+                medicineDiv.className = 'medicine-item border-bottom pb-3 mb-3';
+                
+                let template = document.getElementById('medicineTemplate').innerHTML;
+                template = template.replace(/{index}/g, medicineIndex++);
+                medicineDiv.innerHTML = template;
+
+                // Değerleri ayarla
+                medicineDiv.querySelector('.medicine-select').value = select.val();
+                medicineDiv.querySelector('input[name*="DailyDose"]').value = dose.val();
+                medicineDiv.querySelector('input[name*="DurationInDays"]').value = duration.val();
+                medicineDiv.querySelector('input[name*="Instructions"]').value = instructions.val();
+                medicineDiv.querySelector('.unit-label').textContent = $('#newMedicineUnit').text();
+
+                // Silme butonu işlevselliği
+                medicineDiv.querySelector('.remove-medicine').addEventListener('click', function() {
+                    medicineDiv.remove();
+                });
+
+                // Listeye ekle
+                document.getElementById('medicineList').appendChild(medicineDiv);
+
+                // Formu temizle
+                select.val('');
+                dose.val('');
+                duration.val('');
+                instructions.val('');
+                $('#newMedicineUnit').text('birim');
+
+                // İlaç ekleme formunu gizle
+                $('#addMedicineForm').slideUp();
+                $('#showAddMedicineForm').find('i').removeClass('bi-dash-circle').addClass('bi-plus-circle');
+            });
+
+            // Form gönderilmeden önce kontrol
+            $('#prescriptionForm').on('submit', function(e) {
+                e.preventDefault();
+
+                // Form verilerini konsola yazdır (debug için)
+                const formData = $(this).serializeArray();
+                console.log('Form verileri:', formData);
+
+                // Temel validasyonlar
+                if (!$('#PatientId').val()) {
+                    alert('Lütfen hasta seçiniz!');
+                    return false;
+                }
+
+                if (!$('#Diagnosis').val()) {
+                    alert('Lütfen tanı giriniz!');
+                    return false;
+                }
+
+                // İlaç validasyonları
+                const medicineItems = $('.medicine-item');
+                let isValid = true;
+
+                medicineItems.each(function() {
+                    const medicineSelect = $(this).find('.medicine-select');
+                    const dailyDose = $(this).find('input[name*="DailyDose"]');
+                    const duration = $(this).find('input[name*="DurationInDays"]');
+
+                    if (!medicineSelect.val() || !dailyDose.val() || !duration.val()) {
+                        alert('Lütfen tüm ilaç bilgilerini eksiksiz doldurunuz!');
+                        isValid = false;
+                        return false;
+                    }
+                });
+
+                if (!isValid) {
+                    return false;
+                }
+
+                // Form gönderimi
+                this.submit();
+            });
+        });
+    </script>
+}

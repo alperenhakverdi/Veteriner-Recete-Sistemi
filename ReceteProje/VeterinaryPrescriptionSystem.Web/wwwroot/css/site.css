@@ -1,0 +1,162 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: #f8f9fa;
+}
+
+/* Custom Styles */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+.card {
+  transition: transform 0.2s ease-in-out;
+  border: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card.border-primary {
+  border-top: 4px solid #0d6efd !important;
+}
+
+.card.border-success {
+  border-top: 4px solid #198754 !important;
+}
+
+.card.border-info {
+  border-top: 4px solid #0dcaf0 !important;
+}
+
+.card.border-warning {
+  border-top: 4px solid #ffc107 !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.table {
+  vertical-align: middle;
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+  background-color: white;
+  box-shadow: 0 -2px 4px rgba(0,0,0,.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1.display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .lead {
+    font-size: 1.1rem;
+  }
+}
+
+/* Custom Badge Styles */
+.badge {
+  padding: 0.5em 0.75em;
+  font-weight: 500;
+  border-radius: 0.5rem;
+}
+
+/* Custom Button Group Styles */
+.btn-group {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.btn-group .btn {
+  border-radius: 0;
+}
+
+/* Custom Table Styles */
+.table-hover tbody tr:hover {
+  background-color: rgba(0,0,0,.02);
+}
+
+.table-light {
+  background-color: #f8f9fa;
+}
+
+/* Custom Link Styles */
+a {
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+/* Custom Icon Styles */
+.bi {
+  vertical-align: -0.125em;
+}
